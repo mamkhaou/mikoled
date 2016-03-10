@@ -74,7 +74,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.d("Service","Service started with work commit test");
+        Log.d("Service","Service started with work commit test 1");
     /*
         Intent notificationIntent = new Intent(this, Cmd.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
