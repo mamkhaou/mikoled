@@ -75,7 +75,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.d("Service","Service started with work commit test 2878");
-    /*
+
         Intent notificationIntent = new Intent(this, Cmd.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -107,20 +107,20 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
 
         // creat visualizer with audio mix out
-        if(!mVisualizerstatus)
+      /*  if(!mVisualizerstatus)
         {
             mMusicVisualizer = new Visualizer(0);
             //set capture size
             mMusicVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]); //512 sample  rang 1
             // set listener
             mMusicVisualizer.setDataCaptureListener(this,Visualizer.getMaxCaptureRate()/2 , false, true);
-        }
-        Log.d("test","on Strat commande mikoled service");
+        }*/
+        Log.d("test","on Start commande mikoled service");
 
         // phone listener
         MyPhoneStateListener phone = new MyPhoneStateListener();
         TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        TelephonyMgr.listen(phone, PhoneStateListener.LISTEN_CALL_STATE);*/
+        TelephonyMgr.listen(phone, PhoneStateListener.LISTEN_CALL_STATE);
 
         return START_REDELIVER_INTENT;
     }
