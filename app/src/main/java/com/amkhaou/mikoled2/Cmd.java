@@ -6,6 +6,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,8 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(getActivity(), MikoService.class);
-        getActivity().bindService(intent, mConnection, 0/*Context.BIND_AUTO_CREATE*/);
+        mBound = getActivity().bindService(intent, mConnection, 0/*Context.BIND_AUTO_CREATE*/);
+        Log.d("Cmd", "On Start mBound " + mBound);
 
     }
 

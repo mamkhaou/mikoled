@@ -37,6 +37,7 @@ import android.view.accessibility.AccessibilityEvent;
 public class MikoService extends Service implements Runnable,OnDataCaptureListener {
 
     // Binder given to clients
+    public boolean mService_status = false;
     private final IBinder mBinder = new LocalBinder();
     private BluetoothAdapter mBtAdapter = null;
     private BluetoothSocket mBtSocket = null;
@@ -107,21 +108,21 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
 
         // creat visualizer with audio mix out
-      /*  if(!mVisualizerstatus)
+        if(!mVisualizerstatus)
         {
             mMusicVisualizer = new Visualizer(0);
             //set capture size
             mMusicVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]); //512 sample  rang 1
             // set listener
             mMusicVisualizer.setDataCaptureListener(this,Visualizer.getMaxCaptureRate()/2 , false, true);
-        }*/
-        Log.d("test","on Start commande mikoled service");
+        }
 
         // phone listener
         MyPhoneStateListener phone = new MyPhoneStateListener();
         TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         TelephonyMgr.listen(phone, PhoneStateListener.LISTEN_CALL_STATE);
 
+        mService_status = true;
         return START_REDELIVER_INTENT;
     }
 
@@ -354,15 +355,21 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
     }
     public void enablevisualizer()
     {
-        mVisualizerstatus =true;
-        mMusicVisualizer.setEnabled(true);
+        if(mMusicVisualizer != null)
+        {
+            mVisualizerstatus =true;
+            mMusicVisualizer.setEnabled(true);
+        }
+
     }
 
     public void disablevisualizer()
     {
-
-        mVisualizerstatus =false;
-        mMusicVisualizer.setEnabled(false);
+        if(mMusicVisualizer != null)
+        {
+            mVisualizerstatus = false;
+            mMusicVisualizer.setEnabled(false);
+        }
     }
 
     public void callnotificationsetenable(boolean status)
