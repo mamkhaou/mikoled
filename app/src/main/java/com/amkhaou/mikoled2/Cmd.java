@@ -62,6 +62,8 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
         mWhiteButton.setOnCheckedChangeListener(this);
         mWhiteBar.setOnSeekBarChangeListener(this);
 
+        setHasOptionsMenu(true);
+
         return v;
 
     }

@@ -18,7 +18,7 @@ public class PageViewer extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_page_viewer);
-        mainpager= (ViewPager) findViewById(R.id.main_pager);
+        mainpager = (ViewPager) findViewById(R.id.main_pager);
         PageAdapter padapter = new PageAdapter(getSupportFragmentManager());
         // set pageadapter of mainpager
         mainpager.setAdapter(padapter);

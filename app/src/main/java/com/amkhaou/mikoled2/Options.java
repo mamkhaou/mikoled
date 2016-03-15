@@ -42,12 +42,6 @@ public class Options extends Fragment implements CompoundButton.OnCheckedChangeL
         mPreferences = PreferenceManager.getDefaultSharedPreferences(v.getContext());
         editor = mPreferences.edit();
 
-        // Bind to LocalService
-        Intent intent = new Intent(getActivity(), MikoService.class);
-        mBound = getActivity().bindService(intent, mConnection, 0/*Context.BIND_AUTO_CREATE*/);
-        Log.d("Options","On CreatView ");
-
-
 
         return v;
 
@@ -58,16 +52,12 @@ public class Options extends Fragment implements CompoundButton.OnCheckedChangeL
         super.onActivityCreated(savedInstanceState);
         // add listener to vizualier switch
         mMusicVisualizersw.setOnCheckedChangeListener(this);
-        // get visualizer status
-//        mMusicVisualizersw.setChecked(mService.getvisualizerstatus());
-
         // add listeners expect vizulazer wich is created on service, so should be listned only after creating activity ( service )
 
         mCallNotification.setOnCheckedChangeListener(this);
         mPopNotification.setOnCheckedChangeListener(this);
 
-        // get  call and notifications preferences
-        mCallNotification.setChecked(mPreferences.getBoolean("callnotification", true));
+
 
     }
 
@@ -80,6 +70,13 @@ public class Options extends Fragment implements CompoundButton.OnCheckedChangeL
             MikoService.LocalBinder binder = (MikoService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+            // in this place the service is binded.
+            // get  all preferences
+            mCallNotification.setChecked(mPreferences.getBoolean("callnotification", true));
+            mPopNotification.setChecked(mPreferences.getBoolean("popnotification", true));
+            // get visualizer status
+            mMusicVisualizersw.setChecked(mService.getvisualizerstatus());
+
 
 
         }
@@ -97,17 +94,12 @@ public class Options extends Fragment implements CompoundButton.OnCheckedChangeL
         // Bind to LocalService
         Intent intent = new Intent(getActivity(), MikoService.class);
         mBound = getActivity().bindService(intent, mConnection, 0/*Context.BIND_AUTO_CREATE*/);
-        Log.d("Options", "On Start mBound" + mBound);
-        mBound = mService.getvisualizerstatus();
-        Log.d("Options", "On Start mBound" + mBound);
-
 
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("Options", "On Stop ");
         // Unbind from the service
         if (mBound) {
             getActivity().unbindService(mConnection);
@@ -117,8 +109,8 @@ public class Options extends Fragment implements CompoundButton.OnCheckedChangeL
 
 
     @Override
-    public void onCheckedChanged(CompoundButton button, boolean isChecked) {/*
-        if((button == mMusicVisualizersw)&&mService.mService_status)
+    public void onCheckedChanged(CompoundButton button, boolean isChecked) {
+        if(button == mMusicVisualizersw)
         {
             // visualizer actions
             if (mMusicVisualizersw.isChecked())
@@ -127,19 +119,19 @@ public class Options extends Fragment implements CompoundButton.OnCheckedChangeL
                 mService.disablevisualizer();
         }
         // call notification actions
-        if((button == mCallNotification)&&mService.mService_status)
+        if(button == mCallNotification)
         {
             mService.callnotificationsetenable(button.isChecked());
             editor.putBoolean("callnotification", button.isChecked());
             editor.apply();
         }
         // pop notification actions
-        if((button == mPopNotification)&&mService.mService_status)
+        if(button == mPopNotification)
         {
             mService.popnotificationsetenable(button.isChecked());
             editor.putBoolean("popnotification", button.isChecked());
             editor.apply();
 
         }
-   */ }
+    }
 }
