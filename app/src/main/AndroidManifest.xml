@@ -23,7 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PageViewer"></activity>
+        <activity
+            android:name=".PageViewer"
+            android:theme="@style/AppTheme"
+            android:icon="@drawable/ic_launcher" >
+        </activity>
 
         <service android:name=".MikoService" >
         </service>
