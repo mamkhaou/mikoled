@@ -4,7 +4,7 @@
     tools:context="com.amkhaou.mikoled2.Control"
     android:icon="@drawable/ic_launcher">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_exit"
         android:orderInCategory="100"
         android:title="Exit"
         app:showAsAction="always"/>

@@ -94,6 +94,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
                 .setContentText(mMikoname)
                 .setSmallIcon(R.drawable.light_bulb_4)
                 .setContentIntent(pendingIntent)
+                .addAction(0,"Exit",pendingIntent)
                 .setOngoing(true).build();
         startForeground(1,notification);
 
