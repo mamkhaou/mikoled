@@ -46,6 +46,10 @@ public class PageViewer extends ActionBarActivity {
         startService(serviceintent);
 
 
+      /*  Intent intent_nf=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        startActivity(intent_nf);*/
+
+
     }
 
     @Override

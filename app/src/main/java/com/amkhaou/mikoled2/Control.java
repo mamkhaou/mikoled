@@ -31,6 +31,7 @@ public class Control extends Activity {
         Log.d("test", "In onCreate()");
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
+
        
     }
 

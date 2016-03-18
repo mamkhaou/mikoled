@@ -37,7 +37,7 @@ import android.view.accessibility.AccessibilityEvent;
 public class MikoService extends Service implements Runnable,OnDataCaptureListener {
 
     // Binder given to clients
-    public boolean mService_status = false;
+
     private final IBinder mBinder = new LocalBinder();
     private BluetoothAdapter mBtAdapter = null;
     private BluetoothSocket mBtSocket = null;
@@ -75,12 +75,12 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.d("Service","Service started with work commit test 2878");
+        Log.d("Service", "Service started with work commit test 2878");
 
         Intent notificationIntent = new Intent(this, Cmd.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         // bluetooth connection/reconnection
         mMikoname= intent.getStringExtra("MIKONAME");
@@ -94,7 +94,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
                 .setContentText(mMikoname)
                 .setSmallIcon(R.drawable.light_bulb_4)
                 .setContentIntent(pendingIntent)
-                .addAction(0,"Exit",pendingIntent)
+                .addAction(0,"SWITCH OFF",pendingIntent)
                 .setOngoing(true).build();
         startForeground(1,notification);
 
@@ -122,8 +122,9 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
         MyPhoneStateListener phone = new MyPhoneStateListener();
         TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         TelephonyMgr.listen(phone, PhoneStateListener.LISTEN_CALL_STATE);
+        PopNotificationListener pp;
 
-        mService_status = true;
+
         return START_REDELIVER_INTENT;
     }
 
@@ -377,6 +378,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
     {
         mCallNotification= status;
     }
+
     public void popnotificationsetenable(boolean status)
     {
         mPopNotification = status;
@@ -439,27 +441,6 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public class PopNotificationListener extends NotificationListenerService {
-
-        @Override
-        public void onCreate(){
-            super.onCreate();
-            Log.d("DEBUG", "Inside kj on create");
-        }
-
-        @Override
-        public void onNotificationPosted(StatusBarNotification sbn) {
-            //..............
-            Log.d("Noti", "Ca marche");
-            senddata('C',255,255,255);
-        }
-
-        @Override
-        public void onNotificationRemoved(StatusBarNotification sbn) {
-            //..............
-        }
-    }
 
 
 
