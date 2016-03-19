@@ -60,7 +60,8 @@ public class PopNotificationListener extends NotificationListenerService {
 
         // send notification commande to mikoled
         if( mService != null) {
-            mService.sendrequest('N');
+            if(mService.getpopnotificationstatus())
+                mService.sendrequest('N');
         }
     }
 

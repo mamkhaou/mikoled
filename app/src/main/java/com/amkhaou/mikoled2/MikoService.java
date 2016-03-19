@@ -12,29 +12,22 @@ import java.util.Set;
 import java.util.UUID;
 
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.media.audiofx.Visualizer;
 import android.media.audiofx.Visualizer.OnDataCaptureListener;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
-import android.service.notification.NotificationListenerService;
-import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
 
 public class MikoService extends Service implements Runnable,OnDataCaptureListener {
 
@@ -291,7 +284,6 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
     public void senddata(char C, int data1,int data2,int data3)
     {
-        Log.d("Service","Cmd : "+C);
         if(mOutStream != null)
         {
             mRed=data1;
@@ -336,6 +328,8 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
     public void sendrequest(int request)
     {
+        Log.d("Service","Cmd"+request);
+
         try {
             mOutStream.write(request&0xFF);
         } catch (IOException e) {
@@ -410,6 +404,10 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
     public boolean getvisualizerstatus() {
         // TODO Auto-generated method stub
         return mMusicVisualizer.getEnabled();
+    }
+    public boolean getpopnotificationstatus()
+    {
+        return mPopNotification;
     }
 
     public class MyPhoneStateListener extends PhoneStateListener {
