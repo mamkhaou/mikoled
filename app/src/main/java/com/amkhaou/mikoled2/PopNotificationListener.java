@@ -1,7 +1,9 @@
 package com.amkhaou.mikoled2;
 
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
@@ -15,11 +17,32 @@ import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class PopNotificationListener extends NotificationListenerService {
 
+    private MikoService mService;
+    private boolean mBound;
+
     @Override
     public void onCreate(){
         super.onCreate();
-        Log.d("Service", "Inside  on create");
     }
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            MikoService.LocalBinder binder = (MikoService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -29,8 +52,16 @@ public class PopNotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         //..............
-        Log.d("Service", "Ca marche");
-        //senddata('C',255,255,255);
+        Log.d("Service", sbn.toString());
+
+        // Bind to LocalService
+        Intent intent = new Intent(getApplicationContext(), MikoService.class);
+        mBound = getApplicationContext().bindService(intent, mConnection, 0/*Context.BIND_AUTO_CREATE*/);
+
+        // send notification commande to mikoled
+        if( mService != null) {
+            mService.sendrequest('N');
+        }
     }
 
     @Override

@@ -19,8 +19,10 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.audiofx.Visualizer;
 import android.media.audiofx.Visualizer.OnDataCaptureListener;
 import android.os.Binder;
@@ -53,6 +55,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
     public int mBlue;
     private Visualizer mMusicVisualizer;
     private boolean mVisualizerstatus=false;
+
     // Well known SPP UUID
     private static final UUID MY_UUID =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -122,11 +125,11 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
         MyPhoneStateListener phone = new MyPhoneStateListener();
         TelephonyManager TelephonyMgr = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         TelephonyMgr.listen(phone, PhoneStateListener.LISTEN_CALL_STATE);
-        PopNotificationListener pp;
 
 
         return START_REDELIVER_INTENT;
     }
+
 
     @Override
     public void run() {
@@ -288,6 +291,7 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
 
     public void senddata(char C, int data1,int data2,int data3)
     {
+        Log.d("Service","Cmd : "+C);
         if(mOutStream != null)
         {
             mRed=data1;
@@ -440,7 +444,6 @@ public class MikoService extends Service implements Runnable,OnDataCaptureListen
         }
 
     }
-
 
 
 
