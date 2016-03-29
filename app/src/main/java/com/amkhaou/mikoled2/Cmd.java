@@ -6,8 +6,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -36,6 +40,7 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
     private RadioButton mRgbButton;
     private RadioButton mWhiteButton;
     private SeekBar mWhiteBar;
+    private android.support.v7.widget.SwitchCompat mPowerSwitch;
 
 
     @Override
@@ -51,11 +56,14 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
         // get seekbar
         mWhiteBar = (SeekBar) v.findViewById(R.id.whitebar);
 
+
+
         // connect value bar to colorpicker
 
         mColorPicker.addValueBar(mValueBar);
         mColorPicker.setOnColorSelectedListener(this);
         mColorPicker.setShowOldCenterColor(false);
+
         // add listeners
         mValueBar.setOnValueChangedListener(this);
         mRgbButton.setOnCheckedChangeListener(this);
@@ -68,6 +76,17 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        MenuItem item = menu.findItem(R.id.itempowerswitch);
+        mPowerSwitch = (SwitchCompat) item.getActionView();
+        // add listenner to power switch
+        mPowerSwitch.setOnCheckedChangeListener(this);
+
+    }
+
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -77,6 +96,12 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
             MikoService.LocalBinder binder = (MikoService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+
+            // get RGV value and power status
+            mPowerSwitch.setChecked(mService.getpowerstatus());
+            mRed = mService.mRed;
+            mGreen = mService.mGreen;
+            mBlue = mService.mBlue;
 
 
         }
@@ -113,18 +138,19 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
     @Override
     public void onColorSelected(int color) {
 
-        mBlue =  color & 255;
-        mGreen = (color >> 8) & 255;
-        mRed =   (color >> 16) & 255;
-        if(mRgbButton.isChecked())
-            mService.senddata('C', mRed, mGreen, mBlue);
+        if(mRgbButton.isChecked()&&mPowerSwitch.isChecked()) {
 
+            mBlue = color & 255;
+            mGreen = (color >> 8) & 255;
+            mRed = (color >> 16) & 255;
+            mService.senddata('C', mRed, mGreen, mBlue);
+        }
 
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if( mWhiteButton.isChecked())
+        if( mWhiteButton.isChecked()&&mPowerSwitch.isChecked())
         {
             mService.senddata('C', progress, progress, progress);
             mRed=mGreen=mBlue= progress;
@@ -145,11 +171,13 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
     @Override
     public void onValueChanged(int value) {
 
-        mBlue =  value & 255;
-        mGreen = (value >> 8) & 255;
-        mRed =   (value >> 16) & 255;
-        if( mRgbButton.isChecked())
+        if( mRgbButton.isChecked()&&mPowerSwitch.isChecked()) {
+
+            mBlue = value & 255;
+            mGreen = (value >> 8) & 255;
+            mRed = (value >> 16) & 255;
             mService.senddata('C', mRed, mGreen, mBlue);
+        }
 
     }
 
@@ -159,7 +187,7 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
 
         // TODO Auto-generated method stub
 
-        if(mRgbButton.isChecked()&&(button==mRgbButton))
+        if(isChecked&&(button==mRgbButton)&&mPowerSwitch.isChecked())
         {
             // check if visualizer is enable
             //	if(communicator.getvisualizerstatus())
@@ -174,16 +202,21 @@ public class Cmd extends Fragment implements ColorPicker.OnColorSelectedListener
             mService.senddata('C', mBlue, mGreen, mRed);
         }
 
-        if(mWhiteButton.isChecked()&&(button==mWhiteButton))
+        if(isChecked&&(button==mWhiteButton)&&mPowerSwitch.isChecked())
         {
-            // check if visualizer is enable
-            //	if(communicator.getvisualizerstatus())
-            //		communicator.disablevisualizer();
             // clear rgb button
             mRgbButton.setChecked(false);
             mRed=mGreen=mBlue= mWhiteBar.getProgress();
             mService.senddata('C', mRed, mGreen,mBlue);
 
+        }
+
+        if(button == mPowerSwitch)
+        {
+            if(isChecked)
+                mService.senddata('C', mRed, mGreen,mBlue);
+            else
+                mService.senddata('C',0,0,0);
         }
 
     }

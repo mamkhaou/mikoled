@@ -30,8 +30,6 @@ public class Control extends Activity {
         setContentView(R.layout.activity_device_chooser);
         Log.d("test", "In onCreate()");
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-
-
        
     }
 
@@ -42,8 +40,6 @@ public class Control extends Activity {
         showdevicelist();
 
     }
-
-
 
 
     @Override

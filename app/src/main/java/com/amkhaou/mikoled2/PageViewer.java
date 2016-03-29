@@ -7,7 +7,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -17,6 +19,7 @@ public class PageViewer extends ActionBarActivity {
     ViewPager mainpager;
     protected String mMikoname = null;
     protected android.support.v7.app.ActionBar mActionBar ;
+    private android.support.v7.widget.SwitchCompat mPowerSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,7 @@ public class PageViewer extends ActionBarActivity {
         mainpager.setAdapter(padapter);
 
         //get Mikoled name
-        Intent intent =  getIntent();
+        Intent intent = getIntent();
         mMikoname= intent.getStringExtra("MIKONAME");
 
         //change actionbar name

@@ -3,9 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.amkhaou.mikoled2.Control"
     android:icon="@drawable/ic_launcher">
+
+    <item
+        android:id="@+id/itempowerswitch"
+        android:title=""
+        app:showAsAction="always"
+        app:actionLayout="@layout/powerswitch_layout" />
+
     <item
         android:id="@+id/action_exit"
         android:orderInCategory="100"
         android:title="Exit"
         app:showAsAction="always"/>
+
+
 </menu>
